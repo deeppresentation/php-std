@@ -2,15 +2,20 @@
     "name": "greeng/php-std",
     "description": "Standard php library according to PSR-4 with classes for easement and speed-up common php development process.",
     "type": "library",
+    "keywords": ["psr-4", "library", "composer package", "standartd"],
     "license": "GPL-3.0",
     "authors": [
         {
             "name": "Tomas Groulik",
-            "email": "tomas.groulik@gmail.com"
+            "email": "tomas.groulik@gmail.com",
+            "homepage": "https://github.com/green-g/php-std",
+            "role": "developer"
         }
     ],
     "minimum-stability": "beta",
-    "require": {},
+    "require": {
+        "php": ">=7.2.1"
+    },
     "autoload": {
         "psr-4": {
             "GreenG\\Std\\": "src"
