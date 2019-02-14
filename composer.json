@@ -13,7 +13,7 @@
     "require": {},
     "autoload": {
         "psr-4": {
-            "GreenG\\Std": "src"
+            "GreenG\\Std\\": "src"
         }
     }
 }
