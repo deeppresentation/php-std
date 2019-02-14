@@ -1,0 +1,57 @@
+<?php namespace GreenG\Std\Core;
+
+class Path
+{
+    public static function fix_slashes(string $filePAth, string $correctSlash = DIRECTORY_SEPARATOR)
+    {
+        $slashCharToFix = ($correctSlash == "/") ? "\\" : "/";
+        return str_replace($slashCharToFix, $correctSlash, $filePAth);
+    }
+
+    public static function combine_unix($path1, $path2)
+    {
+        return self::combine($path1, $path2,  "/");
+    }
+
+    public static function combine($path1, $path2, $delimiter = DIRECTORY_SEPARATOR)
+    {
+        $path1 = self::fix_slashes($path1, $delimiter);
+        $path2 = self::fix_slashes($path2, $delimiter);
+        $completedPath = '';
+
+        if(substr($path1, strlen($path1) - 2, strlen($path1) - 1) !== $delimiter)
+        {
+            $completedPath = $path1 . $delimiter;
+        }
+        else
+        {
+            $completedPath = $path1;
+        }
+        
+        if(substr($path2, 0, 1) !== $delimiter)
+        {
+            $completedPath .= $path2;
+        }
+        else
+        {
+            $completedPath .= substr($path2, 1, strlen($path2) - 1);
+        }
+        
+        return $completedPath;
+    }
+
+    public static function get_dir_contents($dir, &$results = array()){
+        $files = scandir($dir);
+    
+        foreach($files as $key => $value){
+            $path = realpath($dir.DIRECTORY_SEPARATOR.$value);
+            if(!is_dir($path)) {
+                $results[] = $path;
+            } else if($value != "." && $value != "..") {
+                getDirContents($path, $results);
+                $results[] = $path;
+            }
+        }
+        return $results;
+    }
+}

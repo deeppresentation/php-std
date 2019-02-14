@@ -1,0 +1,19 @@
+{
+    "name": "greeng/std",
+    "description": "Standard php library in PSR-4 with classes for easement and speed-up common php development process.",
+    "type": "library",
+    "license": "GPL-3.0",
+    "authors": [
+        {
+            "name": "Tomas Groulik",
+            "email": "tomas.groulik@gmail.com"
+        }
+    ],
+    "minimum-stability": "beta",
+    "require": {},
+    "autoload": {
+        "psr-4": {
+            "GreenG\\Std": "src"
+        }
+    }
+}
