@@ -2,7 +2,7 @@
 
 use GreenG\Std\Core\Arr;
 use GreenG\Std\Html\Html;
-use GreenG\Std\Html\Dom\Helper;
+use GreenG\Std\Html\Parse\Helper;
 use GreenG\Std\DataFlow\Renderer;
 
 
@@ -19,7 +19,7 @@ class TableRenderer
             $rConfig = Arr::sget($rConfigs, '*', Arr::sget($rConfigs, $ri, null));
             $cConfig = Arr::sget($cConfigs, '*', Arr::sget($cConfigs, $ci, null));
 
-            $convertArgs = Arr::sget($rConfig, 'convert_args', null);
+            $convert = Arr::sget($rConfig, 'convert', null);
 
             $rBlackList =  Arr::as_array(Arr::sget($rConfig,'blackList', []));
             $cBlackList =  Arr::as_array(Arr::sget($cConfig,'blackList', []));
@@ -53,7 +53,7 @@ class TableRenderer
             {
                 $cellVal = [['convert_'.$rid => floatval($cellVal),'content_text' => $cellVal]]; 
             }
-            return Renderer::get_html_country_table_cell_container($rid , $cellVal, $convertArgs);
+            return Renderer::get_html_country_table_cell_container($rid , $cellVal, $convert);
         }
         return '';
     }

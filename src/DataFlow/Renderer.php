@@ -4,6 +4,7 @@ use GreenG\Std\Core\Arr;
 use GreenG\Std\Core\Special;
 use GreenG\Std\Html\Html;
 use GreenG\Std\Core\Color;
+use GreenG\Std\Components\Tooltip;
 
 class Renderer
 {
@@ -71,68 +72,18 @@ class Renderer
         $hComander = reset($hComanders); 
         $pComander = reset($pComanders); 
 
-        $tooltipData = array();
-        $tooltipData['h'] = $hComander ? $hComander->get_data() : ''; 
-        $tooltipData['p'] = $pComander ? $pComander->get_data() : ''; 
-        $tooltipData['imgUrl'] = $imgComander ? $imgComander->get_data() : '';
-        $addAttrsAsoc['data-tooltip'] = Special::pseudo_json_encode($tooltipData);
+        $title = $hComander ? $hComander->get_data() : null;
+        Tooltip::insert_data_attr_to_ref(
+            $addAttrsAsoc, 
+            $title ?? '',
+            $pComander ? $pComander->get_data() : '',
+            $imgComander ? $imgComander->get_data() : ''
+        );
+        return $title;
     }
 
-    private static function convertAsRangeToColor($valToConvert, string $colorConfigStr, $def)
-    {
-        //$colorConfigStr example: -40=#2BC6E9|-20=#4A2BE9|0=#419ADD|20=#EFBF3A|40=#EF913A
-        $colorConfig = explode('|', $colorConfigStr); 
-        $res = $def;      
-        $threasholdsIndexed = [];
-        foreach ($colorConfig as $treasholdCfgStr)
-        {
-            $treasholdCfg = explode('=', $treasholdCfgStr); 
-            if (count($treasholdCfg) >= 2)
-            {
-                $threasholdsIndexed[] = [$treasholdCfg[0], new Color($treasholdCfg[1], 'rgb')];      
-            }
-        }
-        $count = count($threasholdsIndexed);
-        $ranges = [];
-        for ($i=0; $i < $count; $i++) { 
-            $inputRange = ($i==0) ? [PHP_INT_MIN , $threasholdsIndexed[$i][0]] : [$threasholdsIndexed[$i - 1][0], $threasholdsIndexed[$i][0]];  
-            $outputRange = ($i==0) ? [$threasholdsIndexed[$i][1]] : [$threasholdsIndexed[$i - 1][1], $threasholdsIndexed[$i][1]];   
-            $ranges[] = ['input' => $inputRange, 'output' => $outputRange]; 
-            if ($i == $count - 1)
-            {
-                $inputRange = [$threasholdsIndexed[$i][0], PHP_INT_MAX];
-                $outputRange = [$threasholdsIndexed[$i][1]];
-                $ranges[] = ['input' => $inputRange, 'output' => $outputRange];      
-            }
-        }
-        foreach ($ranges as $range)
-        {
-            if ($valToConvert >= $range['input'][0] && $valToConvert < $range['input'][1])
-            {
-                if (count($range['output']) == 1)
-                {
-                    $res = $range['output'][0];
-                }
-                else if (count($range['output']) == 2)
-                {
-                    $leftColor = $range['output'][0]->toArray();
-                    $rightColor = $range['output'][1]->toArray();
-                    $rangeSize = $range['input'][1] - $range['input'][0];
-                    $ratio = ($valToConvert - $range['input'][0]) / $rangeSize;
-                    $resColor = [];
-                    $colorChannelsCnt = count($leftColor);
-                    for ($i=0; $i < $colorChannelsCnt; $i++) { 
-                        $resColor[$i] = (int)((1.0 - $ratio) * $leftColor[$i] + $ratio * $rightColor[$i]);
-                    }
-                    $res = new Color($resColor, 'rgb');
-                }
-                break;
-            }      
-        }
-        return $res;
-    }
-
-    private static function get_html_country_table_cell_container_sub($rowName, $itemPseudoCommanders, $convertArgs)
+ 
+    private static function get_html_country_table_cell_container_sub($rowName, $itemPseudoCommanders, $convert) : ?string
     {
         $renderEn = false;
         // TODO multi content
@@ -144,42 +95,19 @@ class Renderer
         $htmlClasses = array('div-table-cell-sub', 'js--tooltip-ref');
         $htmlStyle = array();
         $addAttrsAsoc = array();
+
+        $imgAlt = null;
         // hover
         if (count($hoverCommanders) > 0)
         {
-            self::get_html_country_table_cell_container_sub_tooltip($hoverCommanders, $addAttrsAsoc);  
+            $imgAlt = self::get_html_country_table_cell_container_sub_tooltip($hoverCommanders, $addAttrsAsoc);  
         }
         // season to color
         if (isset($convertCommander)) // join color strip to each cell top
         { 
             $convertor = $convertCommander->get_content();
             $data = $convertCommander->get_data();
-            switch ($convertor)
-            {
-                case 'season':
-                {
-                    $colorOptions = $convertArgs;
-                    //$htmlClasses[] = "country-table-cell-sub-color-strip";
-                    if (array_key_exists($data, $colorOptions))
-                    {
-                        $htmlStyle['background-color'] = $colorOptions[$data];
-                    }
-                    else
-                    {
-                        $htmlStyle['background-color'] = $colorOptions['Unlisted'];   
-                    }
-                } break;
-                case 'Day temperature':
-                case 'Night temperature':
-                case 'Days of rain':
-                case 'Hours sun':
-                case 'Water temperature':
-                {
-                    $resColor = self::convertAsRangeToColor($data, $convertArgs, new Color([128, 128, 128], 'rgb'));
-                    $htmlStyle['background-color'] = $resColor->toTextHEX();
-                }break;
-            }
-            
+            $htmlStyle['background-color'] = call_user_func($convert['fce'], $data, $convert['args']);            
             $renderEn = true;
         }
         // content
@@ -205,6 +133,7 @@ class Renderer
                             if (!empty($data) ) 
                             {
                                 $attributes['src'] = get_site_url(null, 'wp-content/uploads/' . $data);   
+                                $attributes['alt'] = $imgAlt ?? pathinfo($data, PATHINFO_FILENAME);
                                 if (!file_exists($attributes['src']))
                                 {
                                    // $imgSrc = get_site_url(null, 'wp-content/uploads/' . $rowName. '_Fallback.png');    
@@ -213,9 +142,11 @@ class Renderer
                             else
                             {
                                 $attributes['src'] = get_site_url(null, 'wp-content/uploads/' . $rowName. '_Fallback.png');
+                                $attributes['alt'] = $imgAlt ?? $rowName;
                             }
                         break; // TODO address by param - no wp dependency
-                        case 'url': $attributes['src'] = $data ; break;
+                        case 'url': 
+                        $attributes['src'] = $data ; break;
                         default: $elementName = ''; break;
                     }
                     if (empty($attributes['src'])) 
