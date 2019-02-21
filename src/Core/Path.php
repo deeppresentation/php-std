@@ -8,6 +8,11 @@ class Path
         return str_replace($slashCharToFix, $correctSlash, $filePAth);
     }
 
+    public static function combine_url($path1, $path2)
+    {
+        return self::combine($path1, $path2,  "/");
+    }
+    
     public static function combine_unix($path1, $path2)
     {
         return self::combine($path1, $path2,  "/");
@@ -19,7 +24,8 @@ class Path
         $path2 = self::fix_slashes($path2, $delimiter);
         $completedPath = '';
 
-        if(substr($path1, strlen($path1) - 2, strlen($path1) - 1) !== $delimiter)
+
+        if (!Str::ends_with($path1, $delimiter))//if(substr($path1, strlen($path1) - 2, strlen($path1) - 1) !== $delimiter)
         {
             $completedPath = $path1 . $delimiter;
         }
@@ -28,7 +34,7 @@ class Path
             $completedPath = $path1;
         }
         
-        if(substr($path2, 0, 1) !== $delimiter)
+        if(!Str::starts_with($path2, $delimiter))// substr($path2, 0, 1) !== $delimiter)
         {
             $completedPath .= $path2;
         }

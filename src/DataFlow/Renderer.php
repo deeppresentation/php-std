@@ -176,97 +176,9 @@ class Renderer
         }
     }
 
-
-
     private static function echo_input($key, $value)
     {   
         echo $key . ':' . json_encode($value); 
     }
 
-
-
-
-
-
-
-      /* public static function process($cellData, $pseudoCodeDelimiter = '_', $pseudoCodeArgsDelimiter = '|', $pseudoCodeArgsKeyValSeparator = ':')
-    {
-        self::init();
-        if (is_array($cellData))
-        {          
-            foreach ($cellData as $cellItem)
-            {
-                $itemPseudoCommanders = array();
-                foreach ($cellItem as $pseudoCodeKey => $value)
-                {
-                    $action = PseudoCommand::get_pseudo_action($pseudoCodeKey);
-                    if (isset($action))
-                    {
-                        $itemPseudoCommanders[$action] = new PseudoCommand(
-                            $pseudoCodeKey, 
-                            $value, 
-                            $pseudoCodeDelimiter, 
-                            $pseudoCodeArgsDelimiter, 
-                            $pseudoCodeArgsKeyValSeparator
-                        );
-                    }
-                }
-                self::process_item($itemPseudoCommanders);     
-            }
-        }
-        else
-        {
-            echo $cellData;
-        }
-    }
-
-    private static function process_item($itemPseudoCommanders)
-    {
-        $contentCommander = $itemPseudoCommanders['content'];
-        $convertCommander = $itemPseudoCommanders['convert'];
-        $hoverCommander = $itemPseudoCommanders['hover'];
-
-        $tooltipContent = null;
-        if (isset($hoverCommander))
-        {
-            //$tooltipContent =   
-        }
-        if (isset($convertCommander))
-        {
-            $data = $convertCommander->get_data();
-            if (!empty($data))
-            {
-                echo $data;   
-            } 
-        }
-        // first-step
-        if (isset($contentCommander))
-        {
-            $data = $contentCommander->get_data();
-            if (!empty($data))
-            {
-                $contentType = $contentCommander->get_content();
-                $content = null;
-                echo '<div class="country-month-data-table-cell">';    
-                switch ($contentType)
-                {
-                    case 'img':
-                        $contentLinkType = $contentCommander->get_link();   
-                        $imgSrc = null;
-                        switch ($contentLinkType)
-                        {
-                            case 'file-name': $imgSrc = get_site_url(null, 'wp-content/uploads/' . $data); break; // TODO address by param - no wp dependency
-                            case 'url': $imgSrc = $data ; break;
-                        }
-                        if (isset($imgSrc))
-                        {
-                            echo '<img src="' . $imgSrc . '">'; break;    
-                        }
-                    break;
-                }
-                echo '</div>';   
-            }
-        }
-    }
-*/
 }
