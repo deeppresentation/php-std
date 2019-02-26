@@ -1,6 +1,5 @@
 <?php namespace GreenG\Std\Html;
 
-use GreenG\Std\Html\Html;
 use GreenG\Std\Html\Attr;
 use League\ISO3166\Exception\InvalidArgumentException;
 
@@ -25,7 +24,7 @@ class Element
             throw new InvalidArgumentException('Argument $element must be defined. ');
         }
         $this->parent = null;
-        $this->bemClassPart = $bemClassPart;
+        //$this->bemClassPart = $bemClassPart;
         $this->BEMBase = $BEMBase;
         $this->BEMMod = $BEMMod;
         $this->element = $element;
