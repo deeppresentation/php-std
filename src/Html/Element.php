@@ -16,9 +16,10 @@ class Element
     /** @var Attr */
     public $attributes = null;
 
-       // SECTION Public 
-              //@param string|bool $content
-    public function __construct(string $element, string $BEMBase = null, Attr $attributes = null, $content = null, array $BEMMod = [], $hasClosing = true)
+    // SECTION Public 
+    //@param string|bool $content
+    //@param array|GreenG\Std\Html\Attr $attributes
+    public function __construct(string $element, string $BEMBase = null, $attributes = null, $content = null, array $BEMMod = [], $hasClosing = true)
     {
         if (!$element) {
             throw new InvalidArgumentException('Argument $element must be defined. ');
@@ -29,7 +30,18 @@ class Element
         $this->BEMMod = $BEMMod;
         $this->element = $element;
         $this->add_content($content);
-        $this->attributes = $attributes ?? new Attr();
+        $this->attributes = new Attr();
+        if ($attributes)
+        {
+            if (is_array($attributes))
+            {
+                $this->attributes = new Attr($attributes);    
+            }   
+            else if (is_a($attributes, 'GreenG\Std\Html\Attr'))
+            {
+                $this->attributes = $attributes;    
+            }
+        }
         $this->hasClosing = $hasClosing;
     }
 
@@ -39,9 +51,9 @@ class Element
         if (!$this->hasClosing) {
             throw new \BadMethodCallException("Can't add content into inline not-closing element");
         }
-        if (count($this->BEMMod) > 0) {
+      /*  if (count($this->BEMMod) > 0) {
             throw new InvalidArgumentException("Can't add content into element with BEM modifiers, only last child level is allowed to have an BEM modifiers");
-        }
+        }*/
         if ($content)
         {
             if (is_array($content))

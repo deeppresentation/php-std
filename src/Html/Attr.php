@@ -4,9 +4,9 @@
 class Attr
 {
     private $data = [];
-    public function __construct(array $attributes = [])
+    public function __construct(?array $attributes = null)
     {
-        $this->data = $attributes;  
+        $this->data = $attributes ?? [];  
     }
     public function add_attr(string $key, string $val)
     {
