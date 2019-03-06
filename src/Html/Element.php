@@ -104,9 +104,7 @@ class Element
         }
         $htmlString .= $this->attributes->to_str();
         $htmlString .= '>';
-        if (!$this->hasClosing) {
-            return $htmlString;
-        }
+
         foreach ($this->content as $content) {
             if (is_a($content, 'GreenG\Std\Html\Element'))
             {
@@ -117,6 +115,9 @@ class Element
                 $htmlString .= $content;   
             }
         }
+        if (!$this->hasClosing) {
+            return $htmlString;
+        }
         $htmlString .= '</' . $this->element . '>';
         return $htmlString;
     }
@@ -125,6 +126,19 @@ class Element
     {
         echo $this->to_str();
     }
+
+    public function renderOpened()
+    {
+        $tmpClosing = $this->hasClosing;
+        $this->hasClosing = false;
+        echo $this->to_str();
+        $this->hasClosing = $tmpClosing;
+    }
+    public function renderClosing()
+    {
+        echo '</' . $this->element . '>';
+    }
+
 
 
        // !SECTION End - Public

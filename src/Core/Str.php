@@ -25,6 +25,17 @@ class Str
         return $def;
     }
 
+    public static function separed_first_part(string $data, $delimiter = '.', $def = '')
+    {
+        $dataParts = explode($delimiter, $data);
+        $count = count($dataParts);
+        if ($count > 0 )
+        {
+            return $dataParts[0];
+        }     
+        return $def;
+    }
+
     public static function starts_with($haystack, $needle)
     {
         $length = strlen($needle);
