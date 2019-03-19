@@ -62,6 +62,12 @@ class Special
         return $res;
     }
 
+    public static function get_asset_version($distVersion) {
+        if ( defined('G_DEV') && G_DEV )
+          return microtime();
+        return $distVersion;
+      }
+
     // !SECTION End - Public
 
 

@@ -1,6 +1,5 @@
 <?php namespace GreenG\Std\Core;
 
-
 class GoogleGeo
 {
     private $apiKey;
@@ -9,7 +8,7 @@ class GoogleGeo
         $this->apiKey = $apiKey;
     }
 
-    public static function get_map_marker(array $geoData, bool $includeSourceData = false, string $preferedNameTag = 'geo-long-name')
+    public static function get_map_marker(array $geoData, bool $includeSourceData = false, string $preferedNameTag = 'geo-long-name') : array
     {
         $res = [];
         if ($geoData)
@@ -111,56 +110,5 @@ class GoogleGeo
             'geo-source-data' => '',
             'geo-parent' => $geoParent   
         ];
-    }
-
-    public static function get_data_from_wp_post(?int $postId = null)
-    {
-        if (!$postId) $postId = get_the_ID();
-        $data = self::get_initialized_data();
-        if ($postId)
-        { 
-            foreach ($data as $key => $val)
-            {
-                $data[$key] = get_field($key, $postId);
-            }
-        }
-        return $data;
-    }
-
-
-
-    public static function clear_data_in_wp_post(?int $postId = null)
-    {
-        if (!$postId) $postId = get_the_ID();
-        if ($postId)
-        {
-            $data = self::get_initialized_data();
-            foreach ($data as $key => $val) 
-            {
-                WpStd::update_post_meta(
-                    $postId,
-                    $key,
-                    ''
-                );
-            }
-        }
-    }
-
-    public static function set_data_to_wp_post(array $geoData, ?int $postId = null)
-    {
-        if (!$postId) $postId = get_the_ID();
-        if ($postId)
-        {
-            foreach ($geoData as $key => $val) 
-            {
-                WpStd::update_post_meta(
-                    $postId,
-                    $key,
-                    $val
-                );
-            }
-        }
-    }
-
-    
+    }   
 }
