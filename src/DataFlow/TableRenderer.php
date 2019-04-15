@@ -10,7 +10,6 @@ class TableRenderer
 {
     private static function get_pre_processed_cell($cellVal, bool $isHeader, array $labelConfig, $rid= -1, $ri = -1, int $ci = -1, $customAttributes = null) 
     {
-        $convertArgs = null;
         if (!$isHeader)
         {
             $rConfigs = Arr::sget($labelConfig, 'body.rows', null);
@@ -31,7 +30,7 @@ class TableRenderer
             $config = Arr::sget($labelConfig, 'header', null);   
             $blacklist = Arr::as_array(Arr::sget($config,'blackList', []));
         }
-        if ($config)
+        if ($config && !Arr::sget($config, 'renderAsCell', false))
         {
             if( !in_array($cellVal, $blacklist)) 
             {
@@ -75,6 +74,10 @@ class TableRenderer
     private static function get_r_configs_by_row_id(array $config, $rId)
     {
         $allRowsConfig = Arr::sget($config, 'body.rows');
+        if (!$allRowsConfig || !is_array($allRowsConfig))
+        {
+            return null;
+        }
         $res = [];
         foreach ($allRowsConfig as $key => $val)
         {
@@ -100,8 +103,6 @@ class TableRenderer
         $tableAttr = 'class="div-table'. ((!empty($tableClasses)) ? ' '. $tableClasses : '').'"' . ((!empty($tableId))?' id="'.$tableId.'"':'');
         if ( isset($table) ) {
             $res .= '<div '. $tableAttr .'">'; 
-               
-
                 // body process
                 $rowIdColumnIdx = self::get_column_of_row_idx($config);
                 $cellResults = [];
@@ -135,7 +136,20 @@ class TableRenderer
                                 }
                             }
                         }
-                        
+                    }
+                    else
+                    {
+                        if (!isset($cellResults[$ri])) 
+                        {
+                            $isFirstOutRowRun = true;
+                            $cellResults[$ri] = [];
+                        }
+                        foreach ( $tr as $ci => $td ) 
+                        {
+                            $data = $td['c'];
+                            if (!isset($cellResults[$ri][$ci])) $cellResults[$ri][$ci] = [];
+                            $cellResults[$ri][$ci][$rowId] = self::get_pre_processed_cell($data, false, $config, $rowId, $ri, $ci);
+                        }
                     }
                 }
                 ksort($cellResults);
@@ -146,7 +160,6 @@ class TableRenderer
                     $cellResultsPostproc = [];
                     foreach ($cellResults as $ci_top => $cr_top)
                     {
-
                         foreach ($cr_top as $ci_middle => $cr_middle)
                         {
                             if (!empty($cr_middle)  && $ci_middle != $rowIdColumnIdx)
@@ -185,7 +198,8 @@ class TableRenderer
                     $cellResultsPostproc = $cellResults;    
                 }
 
-                if (!Arr::sget($config, 'isWatherTable', false)) // TODO
+                if (!Arr::sget($config, 'isWatherTable', false) && 
+                    !Arr::sget($config, 'isGroupTable', false)) // TODO
                 {
                     // header
                     if (array_key_exists('header', $config) )

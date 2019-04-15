@@ -120,44 +120,53 @@ class Renderer
             $attributes = [];
             $subContent = null;
             $closingEl = true;
-            switch ($subContentType)
+            if (substr($subContentType, 0, 1) == 'h')
             {
-                case 'img':
-                    $closingEl = false;
-                    $elementName = 'img';
-                    $contentLinkType = $contentCommander->get_link();   
-                    $imgSrc = null;
-                    switch ($contentLinkType)
-                    {
-                        case 'file-name':  
-                            if (!empty($data) ) 
-                            {
-                                $attributes['src'] = get_site_url(null, 'wp-content/uploads/' . $data);   
-                                $attributes['alt'] = $imgAlt ?? pathinfo($data, PATHINFO_FILENAME);
-                                if (!file_exists($attributes['src']))
+                $elementName = $subContentType;
+                $subContent = $data;
+            }
+            else
+            {
+                switch ($subContentType)
+                {
+                    case 'img':
+                        $closingEl = false;
+                        $elementName = 'img';
+                        $contentLinkType = $contentCommander->get_link();   
+                        $imgSrc = null;
+                        switch ($contentLinkType)
+                        {
+                            case 'file-name':  
+                                if (!empty($data) ) 
                                 {
-                                   // $imgSrc = get_site_url(null, 'wp-content/uploads/' . $rowName. '_Fallback.png');    
-                                }      
-                            }
-                            else
-                            {
-                                $attributes['src'] = get_site_url(null, 'wp-content/uploads/' . $rowName. '_Fallback.png');
-                                $attributes['alt'] = $imgAlt ?? $rowName;
-                            }
-                        break; // TODO address by param - no wp dependency
-                        case 'url': 
-                        $attributes['src'] = $data ; break;
-                        default: $elementName = ''; break;
-                    }
-                    if (empty($attributes['src'])) 
-                    {
-                        $elementName = '';  
-                    }
-                break;
-                case 'text':
-                    $elementName = 'p';
-                    $subContent = $data;
-                break;
+                                    $attributes['src'] = get_site_url(null, 'wp-content/uploads/' . $data);   
+                                    $attributes['alt'] = $imgAlt ?? pathinfo($data, PATHINFO_FILENAME);
+                                    if (!file_exists($attributes['src']))
+                                    {
+                                    // $imgSrc = get_site_url(null, 'wp-content/uploads/' . $rowName. '_Fallback.png');    
+                                    }      
+                                }
+                                else
+                                {
+                                    $attributes['src'] = get_site_url(null, 'wp-content/uploads/' . $rowName. '_Fallback.png');
+                                    $attributes['alt'] = $imgAlt ?? $rowName;
+                                }
+                            break; // TODO address by param - no wp dependency
+                            case 'url': 
+                            $attributes['src'] = $data ; break;
+                            default: $elementName = ''; break;
+                        }
+                        if (empty($attributes['src'])) 
+                        {
+                            $elementName = '';  
+                        }
+                    break;
+                    case 'p':
+                    case 'text':
+                        $elementName = 'p';
+                        $subContent = $data;
+                    break;
+                }
             }
             if (!empty($elementName))
             {
@@ -166,6 +175,7 @@ class Renderer
             }
         
         }
+
         if ($renderEn)
         {
             return  Html::get_str('div', $htmlClasses, $htmlStyle, $content, $addAttrsAsoc);
