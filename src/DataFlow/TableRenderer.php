@@ -50,7 +50,11 @@ class TableRenderer
         {
             if (!is_array($cellVal) && Arr::sget($labelConfig, 'isWatherTable', false))//TODO 
             {
-                $cellVal = [['convert_'.$rid => floatval($cellVal),'content_text' => $cellVal]]; 
+                $cellVal = [ [
+                        'convert__style_prop:background-color' => floatval($cellVal),
+                        'content_p' => $cellVal
+                    ]
+                ]; 
             }
             return Renderer::get_html_country_table_cell_container($rid , $cellVal, $convert);
         }
@@ -76,7 +80,7 @@ class TableRenderer
         $allRowsConfig = Arr::sget($config, 'body.rows');
         if (!$allRowsConfig || !is_array($allRowsConfig))
         {
-            return null;
+            return ['*'=> ''];
         }
         $res = [];
         foreach ($allRowsConfig as $key => $val)
@@ -86,6 +90,17 @@ class TableRenderer
             {
                 $res[$key] = $val;
             }
+        }
+        if (!count($res))
+        {
+            foreach ($allRowsConfig as $key => $val)
+            {
+                if ($key === '*')
+                {
+                    $res[$key] = $val;
+                    break;
+                }
+            }   
         }
         return $res;
     }
@@ -111,44 +126,49 @@ class TableRenderer
                     $rConfigs = self::get_r_configs_by_row_id($config, $rowId); // Arr::sget($config, 'body.rows.*', Arr::sget($config, 'body.rows.' . $ri));                    
                     if ($rConfigs)
                     {
-                        foreach ($rConfigs as $outRi => $rConfig)
+                        reset($rConfigs);
+                        $first_key = key($rConfigs);
+                        if ($first_key !== '*')
                         {
-                            $isFirstOutRowRun = false;
-                            $alias = Arr::sget($rConfig, 'alias', null);
-                            if (!isset($cellResults[$outRi])) 
+                            foreach ($rConfigs as $outRi => $rConfig)
+                            {
+                                $isFirstOutRowRun = false;
+                                $alias = Arr::sget($rConfig, 'alias', null);
+                                if (!isset($cellResults[$outRi])) 
+                                {
+                                    $isFirstOutRowRun = true;
+                                    $cellResults[$outRi] = [];
+                                }
+                                foreach ( $tr as $ci => $td ) 
+                                {
+                                    $data = $td['c'];
+                                    $disableRendering = false;
+                                    if ($ci == $rowIdColumnIdx)
+                                    {
+                                        if (!is_null($alias)) $data = $alias;
+                                        $disableRendering = !is_null($alias) && !$isFirstOutRowRun;
+                                    }
+                                    if (!$disableRendering)
+                                    {
+                                        if (!isset($cellResults[$outRi][$ci])) $cellResults[$outRi][$ci] = [];
+                                        $cellResults[$outRi][$ci][$rowId] = self::get_pre_processed_cell($data, false, $config, $rowId, $outRi, $ci);
+                                    }
+                                }
+                            }
+                        }
+                        else
+                        {
+                            if (!isset($cellResults[$ri])) 
                             {
                                 $isFirstOutRowRun = true;
-                                $cellResults[$outRi] = [];
+                                $cellResults[$ri] = [];
                             }
                             foreach ( $tr as $ci => $td ) 
                             {
                                 $data = $td['c'];
-                                $disableRendering = false;
-                                if ($ci == $rowIdColumnIdx)
-                                {
-                                    if (!is_null($alias)) $data = $alias;
-                                    $disableRendering = !is_null($alias) && !$isFirstOutRowRun;
-                                }
-                                if (!$disableRendering)
-                                {
-                                    if (!isset($cellResults[$outRi][$ci])) $cellResults[$outRi][$ci] = [];
-                                    $cellResults[$outRi][$ci][$rowId] = self::get_pre_processed_cell($data, false, $config, $rowId, $outRi, $ci);
-                                }
+                                if (!isset($cellResults[$ri][$ci])) $cellResults[$ri][$ci] = [];
+                                $cellResults[$ri][$ci][$rowId] = self::get_pre_processed_cell($data, false, $config, $rowId, $ri, $ci);
                             }
-                        }
-                    }
-                    else
-                    {
-                        if (!isset($cellResults[$ri])) 
-                        {
-                            $isFirstOutRowRun = true;
-                            $cellResults[$ri] = [];
-                        }
-                        foreach ( $tr as $ci => $td ) 
-                        {
-                            $data = $td['c'];
-                            if (!isset($cellResults[$ri][$ci])) $cellResults[$ri][$ci] = [];
-                            $cellResults[$ri][$ci][$rowId] = self::get_pre_processed_cell($data, false, $config, $rowId, $ri, $ci);
                         }
                     }
                 }

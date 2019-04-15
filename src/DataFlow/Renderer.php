@@ -4,11 +4,12 @@ use GreenG\Std\Core\Arr;
 use GreenG\Std\Core\Special;
 use GreenG\Std\Html\Html;
 use GreenG\Std\Core\Color;
+use GreenG\Std\Core\Path;
 use GreenG\Std\Components\Tooltip;
 
 class Renderer
 {
-    //[0] action:  hover content convert_[convertor-name]_style_[style-property]
+    //[0] action:  hover content convert__style_prop:[style-property]
     //[1] content: img h2 p
     //[2] link: file-name url
     public static function get_html_country_table_cell_container($rowName, $cellData, $convertArgs, $pseudoCodeDelimiter = '_', $pseudoCodeArgsDelimiter = '|', $pseudoCodeArgsKeyValSeparator = ':')
@@ -50,6 +51,7 @@ class Renderer
         }
     }
 
+
     private static function default_color_options()
     {
         $defaults = array(
@@ -89,6 +91,7 @@ class Renderer
         // TODO multi content
         $contentCommander = Arr::get($itemPseudoCommanders, 'content.0'); 
         $convertCommander = Arr::get($itemPseudoCommanders,'convert.0');
+        $styleCommander = Arr::get($itemPseudoCommanders,'style.0');
         $hoverCommanders = Arr::as_array(Arr::get($itemPseudoCommanders,'hover'));
    
         $content = array();
@@ -102,13 +105,35 @@ class Renderer
         {
             $imgAlt = self::get_html_country_table_cell_container_sub_tooltip($hoverCommanders, $addAttrsAsoc);  
         }
-        // season to color
+        // convertors
         if (isset($convertCommander)) // join color strip to each cell top
         { 
-            $convertor = $convertCommander->get_content();
-            $data = $convertCommander->get_data();
-            $htmlStyle['background-color'] = call_user_func($convert['fce'], $data, $convert['args']);            
-            $renderEn = true;
+            $data = $convertCommander->get_data(); 
+            if (is_string($convert['fce']) || is_array($convert['fce']))
+            {
+                $cvtRes = call_user_func($convert['fce'], $data, $convert['args']); 
+                switch ($convertCommander->get_link())
+                {
+                    case 'style': 
+                        $styleProp = $convertCommander->get_argVal('prop');
+                        if ($styleProp)
+                        {
+                            $htmlStyle[$styleProp] = $cvtRes;   
+                            $renderEn = true;
+                        }
+                    break;
+                }
+            }       
+        }
+        // convertors
+        if (isset($styleCommander)) // join color strip to each cell top
+        { 
+            $data = $styleCommander->get_data();
+            $stylePropName = $styleCommander->get_content();
+            if ($stylePropName && $data)
+            {
+                $htmlStyle[$stylePropName] = $data;       
+            }
         }
         // content
         if (isset($contentCommander))
@@ -151,9 +176,10 @@ class Renderer
                                     $attributes['src'] = get_site_url(null, 'wp-content/uploads/' . $rowName. '_Fallback.png');
                                     $attributes['alt'] = $imgAlt ?? $rowName;
                                 }
-                            break; // TODO address by param - no wp dependency
+                                break; // TODO address by param - no wp dependency
                             case 'url': 
-                            $attributes['src'] = $data ; break;
+                                $attributes['src'] = $data ; 
+                                break;
                             default: $elementName = ''; break;
                         }
                         if (empty($attributes['src'])) 
@@ -165,6 +191,18 @@ class Renderer
                     case 'text':
                         $elementName = 'p';
                         $subContent = $data;
+                    break;
+                    case 'a':
+                        $elementName = 'a';
+                        $link = '#';
+                        $base = $contentCommander->get_argVal('base');
+                        $linkRel = $contentCommander->get_link();
+                        if ($linkRel)
+                        {
+                            $link = get_site_url(null, Path::combine_unix($base, $linkRel));
+                        }
+                        $attributes['href'] =  $link;  
+                        $subContent = $data;    
                     break;
                 }
             }

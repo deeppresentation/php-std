@@ -22,6 +22,8 @@ class Special
 
     public static function pseudo_json_decode($pseudoJsonString, $assoc = true)
     {
+        if (Str::starts_with($pseudoJsonString, '(@#')) $pseudoJsonString = '"' . $pseudoJsonString;
+        if (Str::ends_with($pseudoJsonString, '#@)')) $pseudoJsonString = $pseudoJsonString . '"';
         $tmp = str_replace('"(@#', '', $pseudoJsonString);
         $tmp = str_replace('#@)"', '', $tmp);
         $tmp = str_replace("``", '"', $tmp);

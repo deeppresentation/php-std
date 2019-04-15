@@ -1,5 +1,7 @@
 <?php namespace GreenG\Std\DataFlow;
 
+use GreenG\Std\Core\Arr;
+
 
 class PseudoCommand
 {
@@ -49,13 +51,9 @@ class PseudoCommand
     {
         return $this->get_command('link');
     }
-    public function get_argVal($key)
+    public function get_argVal($key, $def = null)
     {
-        if (!isset($this->arguments) && array_key_exists($key, $this->arguments))
-        {
-            return $this->arguments[$key];    
-        }
-        return null;
+        return Arr::get($this->arguments, $key, $def);
     }
     public function get_command($commandType)
     {
