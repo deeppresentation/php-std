@@ -42,32 +42,6 @@ class Tooltip {
         return $this->config;
     }
    
-    private static function get_identifiers_html(string $identifiersStr)
-    {
-        $classes = [];
-        $ids = [];
-
-        $identifiers = explode(',', str_replace(' ', '', $identifiersStr));
-        foreach  ($identifiers as $i)
-        {
-            if (strlen($i > 0))
-            {
-                if ($i[0] == '.')
-                {
-                    $classes[] = $i = ltrim($str, '.');
-                }
-                else if ($i[0] == '#')
-                {
-                    $ids[] = $i = ltrim($str, '#');   
-                }
-            }
-        }
-        return (object) [
-            'classes' => $classes,
-            'ids' => $ids
-        ];    
-    }
-
     public function render()
     {
         if ($this->tooltipWrapper)

@@ -22,6 +22,8 @@ class Special
 
     public static function pseudo_json_decode($pseudoJsonString, $assoc = true)
     {
+        if (Str::starts_with($pseudoJsonString, '(@#')) $pseudoJsonString = '"' . $pseudoJsonString;
+        if (Str::ends_with($pseudoJsonString, '#@)')) $pseudoJsonString = $pseudoJsonString . '"';
         $tmp = str_replace('"(@#', '', $pseudoJsonString);
         $tmp = str_replace('#@)"', '', $tmp);
         $tmp = str_replace("``", '"', $tmp);
@@ -61,6 +63,12 @@ class Special
 
         return $res;
     }
+
+    public static function get_asset_version($distVersion) {
+        if ( defined('G_DEV') && G_DEV )
+          return microtime();
+        return $distVersion;
+      }
 
     // !SECTION End - Public
 
