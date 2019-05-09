@@ -28,8 +28,8 @@ class Special
         return json_decode($tmp, $assoc); 
     }
 
-    public static function UR_exists($url){
-        $headers=get_headers($url);
+    public static function UR_exists(string $url){
+        $headers=get_headers($url, null, null);
         return stripos($headers[0],"200 OK")?true:false;
      }
 

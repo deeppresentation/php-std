@@ -36,6 +36,16 @@ class Str
         return $def;
     }
 
+    public static function separed_supplement_of_last_part(string $data, $delimiter = '.', $def = '')
+    {
+        $pos = strrpos($data, $delimiter);
+        if ($pos)
+        {
+            return substr($data, 0, $pos);
+        }
+        return $def;
+    }
+
     public static function starts_with($haystack, $needle)
     {
         $length = strlen($needle);
