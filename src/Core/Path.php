@@ -6,7 +6,7 @@ class Path
     {
         $slashCharToFix = ($correctSlash == "/") ? "\\" : "/";
         return str_replace($slashCharToFix, $correctSlash, $filePAth);
-    }
+    } 
 
     public static function combine_url($path1, $path2)
     {
