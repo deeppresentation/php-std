@@ -61,6 +61,24 @@ class Str
 
         return (substr($haystack, -$length) === $needle);
     }
+
+    public static function char_replace_neighbor_check(string $search, string $replace, string $subject)
+    {
+        $result = '';
+        for ($i = 0; $i < strlen($subject); $i++){
+            if ($subject[$i] === $search)
+            {
+                if ($i > 0 && $subject[$i-1] == $replace) continue;
+                if ($i + 1 < strlen($subject) && $subject[$i+1] == $replace) continue;
+                $result .= $replace;
+            }
+            else {
+                $result .= $subject[$i];
+            }
+
+        }
+        return $result;
+    }
         
     // !SECTION End - Public
 
