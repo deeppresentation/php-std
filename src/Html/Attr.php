@@ -13,6 +13,17 @@ class Attr
         $this->data[$key] = $val;    
     }
 
+    public function append_class(string $val)
+    {
+        if (key_exists('class', $this->data))
+        {
+            $this->data['class'] .= ' ' . $val; 
+        }
+        else {
+            $this->data['class'] = $val;
+        }
+    }
+
     //@param string|array $attrVal
     public function apend_attr(array $attributes)
     {

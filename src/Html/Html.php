@@ -98,7 +98,7 @@ class Html
         
     public static function render_color_text(string $textToEcho, $color)
     {
-        echo self::get_color_text_str();
+        echo self::get_color_text_str($textToEcho, $color);
     }
 
     public static function get_color_text_str(string $textToEcho, $color)
