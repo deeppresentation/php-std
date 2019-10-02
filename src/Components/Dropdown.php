@@ -3,17 +3,21 @@
 use GreenG\Std\Html\Element;
 use GreenG\Std\Html\Attr;
 
-class DropdownItemsCfg{
+
+class DropDownItemCfg extends Attr
+{
+    public $text = '';
     public function __construct(
-        array $items, 
-        array $itemsAttrs = null)
+        string $text,
+        ?array $attributes = null
+    )
     {
-
+        $this->text = $text;
+        parent::__construct($attributes);
     }
-
 }
 
-class Dropdown {
+class Dropdown extends Element{
 
     public $element = null;      
     /**
@@ -27,30 +31,54 @@ class Dropdown {
         string $mainAddClasses = null
     )
     {
-        $buttons = new Element('div', 'btns', new Attr(['class'=> 'js--g-dropdown-btns']), null);
+        $this->breakToNewBEMModule = true;
+        $buttons = new Element('div', 'btns'/*, new Attr(['class'=> 'js--g-dropdown-btns'])*/);
         $idx = 0;
+        $defaultText = '';
         foreach ($items as $itemElement)
         {
-            $itemElement->attributes->append_class('js--g-dropdown-btns__btn');
-            $itemElement->attributes->append_class($BEMBase.'__btns-wrap__btns__btn');
-            if ($activeItemIdx == $idx){
-                $itemElement->attributes->append_class('active');
+            
+            $btn = null;
+            $text = '';
+            $attr = null;
+            if (is_a($itemElement, 'GreenG\Std\Components\DropDownItemCfg'))
+            {
+                $text = $itemElement->text; 
+                $attr = $itemElement; 
+                $btn = new Element('div', 'btn', $itemElement, $itemElement->text);
             }
-            $buttons->add_content($itemElement);
+            elseif (is_string($itemElement)){
+                $text = $itemElement; 
+                $btn = new Element('div', 'btn', null, $itemElement);  
+            }
+            if ($text)
+            {
+                $btn = new Element('div', 'btn', $attr, $text);
+                $btn->attributes->append_class('js--g-dropdown-btn');
+                //$btn->attributes->apend_attr('val', 'test');
+                if ($idx == $activeItemIdx)
+                {
+                    $defaultText = $text;  
+                    $btn->attributes->append_class('selected');
+                }
+                $buttons->add_content($btn);
+            }
             $idx++;
         }
-
-        $this->element = new Element('div', $BEMBase, new Attr(['class' => $mainAddClasses, 'id' => $id]),
-            new Element('div', 'btns-wrap', null, $buttons)
-        );  
-
-    }
-   
-    public function render()
-    {
-        if ($this->element)
-        {
-            $this->element->render(); 
-        }    
+        $mainAddClasses = $mainAddClasses ?? '';
+        parent::__construct(
+            'div', 
+            $BEMBase, [
+                'class' => $mainAddClasses . ' js--g-dropdown', 
+                'id' => $id, 
+                
+                'data-confirmed-value' => $defaultText
+            ], [
+                //new Element('input', 'input', null, null, ),
+                new Element('input', 'input', new Attr(['class' => 'js--g-dropdown-input', 'value' => $defaultText/*, 'tabindex' => 0*/])),
+                new Element('div', 'btns-wrap', new Attr(['class' => 'js--g-dropdown-btns-wrap']), $buttons)
+            ]
+        );
+        
     }
 }
