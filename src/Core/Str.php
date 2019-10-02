@@ -25,6 +25,26 @@ class Str
         return $def;
     }
 
+    public static function get_tag( $attr, $value, $xml, $tag=null ) {
+        if( is_null($tag) )
+          $tag = '\w+';
+        else
+          $tag = preg_quote($tag);
+      
+        $attr = preg_quote($attr);
+        $value = preg_quote($value);
+      
+        $tag_regex = "/<(".$tag.")[^>]*$attr\s*=\s*".
+                      "(['\"])$value\\2[^>]*>(.*?)<\/\\1>/";
+      
+        preg_match_all($tag_regex,
+                       $xml,
+                       $matches,
+                       PREG_PATTERN_ORDER);
+      
+        return $matches[3];
+      }
+
     public static function separed_first_part(string $data, $delimiter = '.', $def = '')
     {
         $dataParts = explode($delimiter, $data);

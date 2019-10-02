@@ -22,6 +22,20 @@ class Attr
         }
     }
 
+    public static function get_style_str(array $assocStyles)
+    {   
+        if (count($assocStyles) > 0)
+        {
+            $res = '';
+            foreach ($assocStyles as $key => $val)
+            {
+                $res .= $key . ':' . $val . ';';    
+            }    
+            return $res;
+        }
+        return '';
+    }
+
     public function to_str()
     {
         return Html::get_attr_str($this->data);
