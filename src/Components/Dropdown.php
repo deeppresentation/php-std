@@ -3,7 +3,6 @@
 use GreenG\Std\Html\Element;
 use GreenG\Std\Html\Attr;
 
-// test git automation
 class DropDownItemCfg extends Attr
 {
     public $text = '';
