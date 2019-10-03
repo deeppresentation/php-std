@@ -5,12 +5,12 @@ use League\ISO3166\Exception\InvalidArgumentException;
 
 class Element
 {
-    /** @var string */
+    protected $breakToNewBEMModule = false;
     private $element = null;
     private $hasClosing = true;
     private $BEMBase = null;
     private $BEMMod = [];
-    private $content = [];
+    protected $content = [];
     /** @var Element */
     private $parent = null;
     /** @var Attr */
@@ -25,6 +25,7 @@ class Element
             throw new InvalidArgumentException('Argument $element must be defined. ');
         }
         $this->parent = null;
+
         //$this->bemClassPart = $bemClassPart;
         $this->BEMBase = $BEMBase;
         $this->BEMMod = $BEMMod;
@@ -84,11 +85,16 @@ class Element
     {
         $identifier = $this->BEMBase;
         $parent = $this->parent;
+
         while ($parent && $parent->BEMBase) {
             $identifier = $parent->BEMBase . '__' . $identifier;
+            if ($parent->breakToNewBEMModule) break;
             $parent = $parent->parent;
         }
+        
         $BEMClases = [$identifier];
+        if ($this->breakToNewBEMModule) $BEMClases[] = $this->BEMBase;
+
         foreach ($this->BEMMod as $mod) {
             $BEMClases[] = $identifier . '--' . $mod;
         }
@@ -141,6 +147,6 @@ class Element
 
 
 
-       // !SECTION End - Public
+    // !SECTION End - Public
 
 }

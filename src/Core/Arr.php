@@ -7,7 +7,10 @@ class Arr
     public static function get($dataIn, $path, $defaultVal = null, string $delimiter='.', bool $caseInsensitive = false)
     {
         if ( (empty($path) && !is_int($path)) || !$dataIn) return $defaultVal;
-        $pathArray = self::as_array(explode($delimiter, $path));
+
+        if (is_array($path)) $pathArray = $path;
+        else $pathArray = self::as_array(explode($delimiter, $path));
+     
         $data = self::as_array($dataIn);
         $temp = &$data;
         foreach($pathArray as $key) 
@@ -45,14 +48,13 @@ class Arr
         return self::get($dataIn, $key, $def, $delimiter, $caseInsensitive);
     }
 
-    public static function set(&$data, $path, $value, $createIfNoExist = false, $delimiter='.')
+    public static function set_as_path_array(&$data, array $pathArray, $value, $createIfNoExist = false)
     {
-        if (empty($path)) 
+        if (empty($pathArray)) 
         {
             $data = $value;
             return;   
         }
-        $pathArray = explode($delimiter, $path);
         $temp = &$data;
         foreach($pathArray as $key) {
             if ($createIfNoExist && !array_key_exists($key, $temp))
@@ -63,6 +65,17 @@ class Arr
         }
         $temp = $value;
         unset($temp);
+    }
+
+    public static function set(&$data, $path, $value, $createIfNoExist = false, $delimiter='.')
+    {
+        if (empty($path)) 
+        {
+            $data = $value;
+            return;   
+        }
+        $pathArray = explode($delimiter, $path);
+        self::set_as_path_array($data, $pathArray, $value, $createIfNoExist);
     }
 
     public static function as_array($value)

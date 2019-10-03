@@ -65,8 +65,8 @@ class Special
     }
 
     public static function get_asset_version($distVersion) {
-        if ( defined('G_DEV') && G_DEV )
-          return microtime();
+        //if ( defined('G_DEV') && G_DEV )
+        //  return microtime();
         return $distVersion;
       }
 
