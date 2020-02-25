@@ -1,4 +1,4 @@
-<?php namespace GreenG\Std\Core;
+<?php namespace DP\Std\Core;
 
 class Str
 {

@@ -1,4 +1,4 @@
-<?php namespace GreenG\Std\Html\Parse;
+<?php namespace DP\Std\Html\Parse;
 
 define('HDOM_TYPE_ELEMENT', 1);
 define('HDOM_TYPE_COMMENT', 2);

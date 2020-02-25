@@ -1,8 +1,8 @@
-<?php namespace GreenG\Std\Components;
+<?php namespace DP\Std\Components;
 
-use GreenG\Std\Html\Element;
-use GreenG\Std\Html\Attr;
-use GreenG\Std\Core\Special;
+use DP\Std\Html\Element;
+use DP\Std\Html\Attr;
+use DP\Std\Core\Special;
 
 
 class Tooltip {

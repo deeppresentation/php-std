@@ -1,9 +1,9 @@
-<?php namespace GreenG\Std\DataFlow;
+<?php namespace DP\Std\DataFlow;
 
-use GreenG\Std\Core\Arr;
-use GreenG\Std\Html\Html;
-use GreenG\Std\Html\Parse\Helper;
-use GreenG\Std\DataFlow\Renderer;
+use DP\Std\Core\Arr;
+use DP\Std\Html\Html;
+use DP\Std\Html\Parse\Helper;
+use DP\Std\DataFlow\Renderer;
 
 
 class TableRenderer

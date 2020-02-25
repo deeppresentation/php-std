@@ -1,4 +1,4 @@
-<?php namespace GreenG\Std\Core;
+<?php namespace DP\Std\Core;
 
 class Csv{
     public static function load(string $file, string $delimiter=',', int $maxLineLength = 10000)

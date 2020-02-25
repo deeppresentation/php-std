@@ -1,5 +1,5 @@
 {
-    "name": "greeng/php-std",
+    "name": "deeppresentation/php-std",
     "description": "Standard php library according to PSR-4 with classes for easement and speed-up common php development process.",
     "type": "library",
     "keywords": ["psr-4", "library", "composer package", "standartd"],
@@ -7,8 +7,8 @@
     "authors": [
         {
             "name": "Tomas Groulik",
-            "email": "tomas.groulik@gmail.com",
-            "homepage": "https://github.com/green-g/php-std",
+            "email": "tomas@deeppresentation.com",
+            "homepage": "https://github.com/deeppresentation/php-std",
             "role": "developer"
         }
     ],
@@ -18,7 +18,7 @@
     },
     "autoload": {
         "psr-4": {
-            "GreenG\\Std\\": "src"
+            "DP\\Std\\": "src"
         }
     }
 }

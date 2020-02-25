@@ -1,7 +1,7 @@
-<?php namespace GreenG\Std\Html;
+<?php namespace DP\Std\Html;
 
-use GreenG\Std\Core\Arr;
-use GreenG\Std\Core\Str;
+use DP\Std\Core\Arr;
+use DP\Std\Core\Str;
 
 
 class Html

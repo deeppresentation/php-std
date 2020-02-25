@@ -1,6 +1,6 @@
-<?php namespace GreenG\Std\Html;
+<?php namespace DP\Std\Html;
 
-use GreenG\Std\Html\Attr;
+use DP\Std\Html\Attr;
 use League\ISO3166\Exception\InvalidArgumentException;
 
 class Element
@@ -18,7 +18,7 @@ class Element
 
     // SECTION Public 
     //@param string|bool $content
-    //@param array|GreenG\Std\Html\Attr $attributes
+    //@param array|DP\Std\Html\Attr $attributes
     public function __construct(string $element, string $BEMBase = null, $attributes = null, $content = null, array $BEMMod = [], $hasClosing = true)
     {
         if (!$element) {
@@ -38,7 +38,7 @@ class Element
             {
                 $this->attributes = new Attr($attributes);    
             }   
-            else if (is_a($attributes, 'GreenG\Std\Html\Attr'))
+            else if (is_a($attributes, 'DP\Std\Html\Attr'))
             {
                 $this->attributes = $attributes;    
             }
@@ -73,8 +73,8 @@ class Element
 
     private function _add_one_content($content)
     {
-        if (is_string($content) || is_a($content, 'GreenG\Std\Html\Element')) {
-            if (is_a($content, 'GreenG\Std\Html\Element')) {
+        if (is_string($content) || is_a($content, 'DP\Std\Html\Element')) {
+            if (is_a($content, 'DP\Std\Html\Element')) {
                 $content->parent = $this;
             }
             $this->content[] = $content;
@@ -112,7 +112,7 @@ class Element
         $htmlString .= '>';
 
         foreach ($this->content as $content) {
-            if (is_a($content, 'GreenG\Std\Html\Element'))
+            if (is_a($content, 'DP\Std\Html\Element'))
             {
                 $htmlString .= $content->to_str();
             }

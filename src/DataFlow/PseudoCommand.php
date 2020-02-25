@@ -1,6 +1,6 @@
-<?php namespace GreenG\Std\DataFlow;
+<?php namespace DP\Std\DataFlow;
 
-use GreenG\Std\Core\Arr;
+use DP\Std\Core\Arr;
 
 
 class PseudoCommand

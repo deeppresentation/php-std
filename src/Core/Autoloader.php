@@ -1,7 +1,7 @@
-<?php namespace GreenG\Std\Core;
+<?php namespace DP\Std\Core;
 
-use GreenG\Std\Core\Str;
-use GreenG\Std\Core\Path;
+use DP\Std\Core\Str;
+use DP\Std\Core\Path;
 
 
 final class Autoloader

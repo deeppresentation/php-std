@@ -1,4 +1,4 @@
-<?php namespace GreenG\Std\Process;
+<?php namespace DP\Std\Process;
 
 class SprinkleProcess
 {

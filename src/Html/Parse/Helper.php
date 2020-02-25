@@ -1,4 +1,4 @@
-<?php namespace GreenG\Std\Html\Parse;
+<?php namespace DP\Std\Html\Parse;
 
 class Helper
 {

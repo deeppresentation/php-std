@@ -1,7 +1,7 @@
-<?php namespace GreenG\Std\Components;
+<?php namespace DP\Std\Components;
 
-use GreenG\Std\Html\Element;
-use GreenG\Std\Html\Attr;
+use DP\Std\Html\Element;
+use DP\Std\Html\Attr;
 
 class DropDownItemCfg extends Attr
 {
@@ -40,7 +40,7 @@ class Dropdown extends Element{
             $btn = null;
             $text = '';
             $attr = null;
-            if (is_a($itemElement, 'GreenG\Std\Components\DropDownItemCfg'))
+            if (is_a($itemElement, 'DP\Std\Components\DropDownItemCfg'))
             {
                 $text = $itemElement->text; 
                 $attr = $itemElement; 
