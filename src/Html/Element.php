@@ -19,7 +19,7 @@ class Element
     // SECTION Public 
     //@param string|bool $content
     //@param array|DP\Std\Html\Attr $attributes
-    public function __construct(string $element, string $BEMBase = null, $attributes = null, $content = null, array $BEMMod = [], $hasClosing = true)
+    public function __construct(string $element, string $BEMBase = null, $attributes = null, $content = null, $BEMMod = [], $hasClosing = true)
     {
         if (!$element) {
             throw new InvalidArgumentException('Argument $element must be defined. ');
@@ -28,7 +28,7 @@ class Element
 
         //$this->bemClassPart = $bemClassPart;
         $this->BEMBase = $BEMBase;
-        $this->BEMMod = $BEMMod;
+        $this->BEMMod = is_string($BEMMod) ? [$BEMMod] : $BEMMod;
         $this->element = $element;
         $this->add_content($content);
         $this->attributes = new Attr();
