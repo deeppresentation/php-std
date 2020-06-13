@@ -2,7 +2,7 @@
 
 class Arr
 {
-    // SECTION Public
+    // SECTION Public aaa
 
     public static function get($dataIn, $path, $defaultVal = null, string $delimiter='.', bool $caseInsensitive = false)
     {
