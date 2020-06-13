@@ -9,7 +9,7 @@ final class Autoloader
     private $gPhpList = array();
     private $locked = false;
     /**
-     * Call this method to get singleton
+     * Call this method to get singleton dd
      *
      * @return Autoloader
      */
