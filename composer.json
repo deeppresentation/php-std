@@ -12,7 +12,7 @@
             "role": "developer"
         }
     ],
-    "minimum-stability": "beta",
+    "minimum-stability": "stable",
     "require": {
         "php": ">=7.2.1"
     },
