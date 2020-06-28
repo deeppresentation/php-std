@@ -1,5 +1,9 @@
 <?php namespace DP\Std\Core;
 
+
+/**
+ * Array basic operations
+ */
 class Arr
 {
     // SECTION Public
