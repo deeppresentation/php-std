@@ -2,7 +2,12 @@
     "name": "deeppresentation/php-std",
     "description": "Standard php library according to PSR-4 with classes for easement and speed-up common php development process.",
     "type": "library",
-    "keywords": ["psr-4", "library", "composer package", "standartd"],
+    "keywords": [
+        "psr-4",
+        "library",
+        "composer package",
+        "standartd"
+    ],
     "license": "GPL-3.0",
     "authors": [
         {
