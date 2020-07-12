@@ -82,6 +82,32 @@ class Str
         return (substr($haystack, -$length) === $needle);
     }
 
+    public static function compare_versions(string $version1, string $version2)
+    {
+        if ($version1 && $version2)
+        {
+            $arr1 = \explode('.', $version1);
+            $arr2 = \explode('.', $version2);
+            $count1 = count($arr1);
+            $count2 = count($arr2);
+
+            $maxLength = \max($count1, $count2);
+            $i = 0;
+            while ($i < $maxLength)
+            {
+                $val1 = $i < $count1 ? intval($arr1[$i]) : 0;
+                $val2 = $i < $count2 ? intval($arr2[$i]) : 0;
+                if ($val1 !== $val2)
+                {
+                    return $val1 > $val2 ? 1 : -1; 
+                }
+                $i++;
+            }
+            return 0;
+        }
+        return null;
+    }
+
     public static function char_replace_neighbor_check(string $search, string $replace, string $subject)
     {
         $result = '';
