@@ -94,9 +94,10 @@ class Element
         
         $BEMClases = [$identifier];
         if ($this->breakToNewBEMModule) $BEMClases[] = $this->BEMBase;
-
-        foreach ($this->BEMMod as $mod) {
-            $BEMClases[] = $identifier . '--' . $mod;
+        if ($this->BEMMod){
+            foreach ($this->BEMMod as $mod) {
+                $BEMClases[] = $identifier . '--' . $mod;
+            }
         }
         return $BEMClases;
     }
