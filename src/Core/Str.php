@@ -25,6 +25,17 @@ class Str
         return $def;
     }
 
+    public static function separed_first_part(string $data, $delimiter = '.', $def = '')
+    {
+        $dataParts = explode($delimiter, $data);
+        $count = count($dataParts);
+        if ($count > 0 )
+        {
+            return $dataParts[0];
+        }     
+        return $def;
+    }
+
     public static function get_tag( $attr, $value, $xml, $tag=null ) {
         if( is_null($tag) )
           $tag = '\w+';
@@ -44,17 +55,6 @@ class Str
       
         return $matches[3];
       }
-
-    public static function separed_first_part(string $data, $delimiter = '.', $def = '')
-    {
-        $dataParts = explode($delimiter, $data);
-        $count = count($dataParts);
-        if ($count > 0 )
-        {
-            return $dataParts[0];
-        }     
-        return $def;
-    }
 
     public static function separed_supplement_of_last_part(string $data, $delimiter = '.', $def = '')
     {
