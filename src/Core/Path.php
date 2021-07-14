@@ -12,6 +12,18 @@ class Path
     {
         return self::combine($path1, $path2,  "/");
     }
+
+    public static function add_params_to_url_query($current_query_str, array $params){
+        $res = $current_query_str ?? '';
+        if ($params){
+            $new_query = http_build_query($params);
+            if ($new_query){
+                $first_sep = $current_query_str ? '&' : '';
+                $res .= ($first_sep . $new_query);
+            }
+        }
+        return $res;
+    }
     
     public static function combine_unix($path1, $path2)
     {
