@@ -1,5 +1,7 @@
 <?php namespace DP\Std\Core;
 
+use DP\Std\Core\Str;
+
 class Path
 {
     public static function fix_slashes(string $filePAth, string $correctSlash = DIRECTORY_SEPARATOR)
@@ -10,6 +12,9 @@ class Path
 
     public static function combine_url($path1, $path2)
     {
+        if (Str::starts_with($path2, '?') && \strpos($path1, '?') !== false){
+            $path2 = \str_replace('?', '&', $path2);
+        }
         return self::combine($path1, $path2,  "/");
     }
 
