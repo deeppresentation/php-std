@@ -11,11 +11,20 @@ class Path
     } 
 
     public static function combine_url($path1, $path2)
-    {
-        if (Str::starts_with($path2, '?') && \strpos($path1, '?') !== false){
-            $path2 = \str_replace('?', '&', $path2);
+    {   
+        if (Str::starts_with($path2, '?') || Str::starts_with($path2, '&')){
+            $path2 = \ltrim($path2,"&?");
+            if (\strpos($path1, '?') !== false) return $path1 . '&' . $path2;
+            else{
+                if (!Str::ends_with($path1, '/')) $path1 .= '/';
+                return $path1 . '?' . $path2;
+            } 
         }
-        return self::combine($path1, $path2,  "/");
+        else if (\strpos($path1, '?') !== false){
+            if (Str::ends_with($path1, '?') || Str::ends_with($path1, '&')) return $path1 . $path2;
+            else return $path1 . '&' . $path2;
+        }
+        else return self::combine($path1, $path2,  "/");
     }
 
     public static function add_params_to_url_query($current_query_str, array $params){
