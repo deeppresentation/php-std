@@ -21,6 +21,16 @@ class Str {
 		return $def;
 	}
 
+	public static function to_camel_case( $string, $separator = '-', $capitalizeFirstCharacter = false ) {
+		$str = str_replace( $separator, '', ucwords( $string, $separator ) );
+
+		if ( ! $capitalizeFirstCharacter ) {
+			$str = lcfirst( $str );
+		}
+
+		return $str;
+	}
+
 	public static function separed_first_part( string $data, $delimiter = '.', $def = '' ) {
 		$dataParts = explode( $delimiter, $data );
 		$count     = count( $dataParts );
@@ -112,6 +122,24 @@ class Str {
 			}
 		}
 		return $result;
+	}
+
+	public static function classes( $args = array(), $include_class_arg_name = false ) {
+		$final_class_arr = array();
+		foreach ( $args as $key => $value ) {
+			if ( $value ) {
+				$final_class_arr[] = $key;
+			}
+		}
+		if ( $include_class_arg_name && count( $final_class_arr ) ) {
+			return 'class="' . implode( ' ', $final_class_arr ) . '"';
+		} else {
+			return implode( ' ', $final_class_arr );
+		}
+	}
+
+	public static function classes_e( $args = array(), $include_class_arg_name = false ) {
+		echo self::classes( $args, $include_class_arg_name );
 	}
 
 	public static function make_url_absolute( $url, $base ) {

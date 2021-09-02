@@ -44,7 +44,7 @@ class Path {
 	}
 
 	public static function combine_unix( $path1, $path2 ) {
-		 return self::combine( $path1, $path2, '/' );
+		return self::combine( $path1, $path2, '/' );
 	}
 
 	public static function combine( $path1, $path2, $delimiter = DIRECTORY_SEPARATOR ) {

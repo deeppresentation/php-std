@@ -89,8 +89,8 @@ class Arr {
 	}
 
 	public static function as_array_merge( $value1, $value2 ) {
-		 $array1 = self::as_array( $value1 );
-		$array2  = self::as_array( $value2 );
+		$array1 = self::as_array( $value1 );
+		$array2 = self::as_array( $value2 );
 		return array_merge( $array1, $array2 );
 	}
 
@@ -123,7 +123,7 @@ class Arr {
 	}
 
 	public static function transpose( $data ) {
-		 $retData = array();
+		$retData = array();
 		foreach ( $data as $row => $columns ) {
 			foreach ( $columns as $row2 => $column2 ) {
 				$retData[ $row2 ][ $row ] = $column2;
@@ -133,7 +133,7 @@ class Arr {
 	}
 
 	public static function multi_implode_glue_by_depth( $array, $glues = array( '|', '-', ',' ) ) {
-		 return self::multi_implode( $array, self::as_array( $glues ), 0 );
+		return self::multi_implode( $array, self::as_array( $glues ), 0 );
 	}
 
 	public static function implode_assoc( $array, $glue = ';', $keyValSeparator = ':' ) {
@@ -145,7 +145,7 @@ class Arr {
 	}
 
 	public static function explode_assoc( $str, $glue = ';', $keyValSeparator = ':' ) {
-		 $res     = array();
+		$res      = array();
 		$exploded = explode( $glue, $str );
 		if ( count( $exploded ) > 0 ) {
 			foreach ( $exploded as $keyValStr ) {
